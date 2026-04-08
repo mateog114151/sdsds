@@ -1,0 +1,51 @@
+<div class="app-container">
+
+  <!-- Configuración -->
+  <div *ngIf="!isSlideshowRunning" class="config-panel">
+    <h1>📸 Google Drive Slideshow PWA</h1>
+    <p class="subtitle">Recuperación • Imágenes verticales aleatorias</p>
+
+    <div class="form-group">
+      <label>Token de Acceso Google</label>
+      <input [(ngModel)]="token" type="password" placeholder="ya29.a0Af..." />
+    </div>
+
+    <div class="form-group">
+      <label>ID de la Carpeta Privada</label>
+      <input [(ngModel)]="folderId" placeholder="1ABC123xyz..." />
+    </div>
+
+    <div class="form-group">
+      <label>Tiempo por imagen (segundos)</label>
+      <input type="number" [(ngModel)]="displayTime" min="10" (ngModelChange)="actualizarTiempo()" />
+      <small>Mínimo recomendado: 60 segundos</small>
+    </div>
+
+    <button (click)="cargarImagenes()" [disabled]="loading" class="btn btn-primary">
+      {{ loading ? 'Cargando todas las imágenes...' : 'Cargar Imágenes Verticales' }}
+    </button>
+
+    <p *ngIf="error" [ngClass]="error.includes('✅') ? 'success' : 'error'">{{ error }}</p>
+
+    <button *ngIf="images.length > 0" (click)="iniciarSlideshow()" class="btn btn-start">
+      🚀 Iniciar Slideshow Aleatorio
+    </button>
+  </div>
+
+  <!-- Slideshow -->
+  <div *ngIf="isSlideshowRunning" class="slideshow">
+    <div class="image-wrapper">
+      <img [src]="currentImageUrl" class="slideshow-image" alt="Imagen aleatoria" />
+    </div>
+
+    <div class="controls">
+      <button (click)="detenerSlideshow()" class="btn-control">⏹ Detener</button>
+      <button (click)="mostrarImagenAleatoria()" class="btn-control">⏭ Siguiente</button>
+      <span class="time-info">{{ displayTime }}s</span>
+    </div>
+
+    <div class="info-bar">
+      {{ images.length }} imágenes verticales • Aleatorio • PWA
+    </div>
+  </div>
+</div>
